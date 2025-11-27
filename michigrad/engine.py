@@ -4,10 +4,14 @@ class Value:
     """ stores a single scalar value and its gradient """
 
     def __init__(self, data, _children=(), _op='', name=''):
+        # El numero que maneja el nodo
         self.data = data
+        # El gradiente del nodo
         self.grad = 0
+        # Nombre para saber en el gráfico
         self.name = name
         # internal variables used for autograd graph construction
+        # Función de backward
         self._backward = lambda: None
         self._prev = set(_children)
         self._op = _op # the op that produced this node, for graphviz / debugging / etc
