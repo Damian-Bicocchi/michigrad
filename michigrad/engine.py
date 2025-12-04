@@ -66,6 +66,10 @@ class Value:
         out._backward = _backward
 
         return out
+    
+    def tanh(self):
+        x = self.data
+        
 
 
     def backward(self):
