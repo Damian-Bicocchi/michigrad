@@ -69,8 +69,30 @@ class Value:
     
     def tanh(self):
         x = self.data
-        
+        # Fórmula: (e^2x - 1)/(e^2x + 1)
+        t = (math.exp(2*x) - 1) / (math.exp(2*x) + 1)
+        out = Value(t, (self, ), 'tanh')
 
+        def _backward():
+            # Derivada: 1 - tanh(x)^2
+            self.grad += (1 - t**2) * out.grad
+            
+        out._backward = _backward
+        return out
+
+    def sigmoid(self):
+        x = self.data
+        # Fórmula: 1 / (1 + e^-x)
+        val = 1 / (1 + math.exp(-x))
+        out = Value(val, (self,), 'sigmoid')
+
+        def _backward():
+            # Esto es matemáticamente equivalente a e^x / (1+e^-x)^2
+            # pero mucho más rápido de calcular porque ya tenemos 'val'.
+            self.grad += (val * (1 - val)) * out.grad
+            
+        out._backward = _backward
+        return out
 
     def backward(self):
 

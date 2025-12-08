@@ -12,26 +12,24 @@ class Module:
 
 class Neuron(Module):
 
-    def __init__(self, nin, nonlin=True):
+    def __init__(self, nin):
         self.w = [Value(random.uniform(-1,1)) for _ in range(nin)]
         self.b = Value(0)
-        self.nonlin = nonlin
 
     def __call__(self, x):
         act = sum((wi*xi for wi,xi in zip(self.w, x)), self.b)
-        return act.relu() if self.nonlin else act
+        return act
 
     def parameters(self):
         return self.w + [self.b]
 
     def __repr__(self):
-        return f"{'ReLU' if self.nonlin else 'Linear'}Neuron({len(self.w)})"
+        return f"LinearNeuron({len(self.w)})"
 
 class Layer(Module):
 
-    def __init__(self, nin, nout, **kwargs):
-        self.neurons = [Neuron(nin, **kwargs) for _ in range(nout)]
-        #self.neurons.
+    def __init__(self, nin, nout):
+        self.neurons = [Neuron(nin) for _ in range(nout)]
 
     def __call__(self, x):
         out = [n(x) for n in self.neurons]
@@ -43,11 +41,41 @@ class Layer(Module):
     def __repr__(self):
         return f"Layer of [{', '.join(str(n) for n in self.neurons)}]"
 
+
+class ReLU(Module):
+    def __call__(self, x):
+        if isinstance(x, list):
+            return [v.relu() for v in x]
+        return x.relu()
+
+class Tanh(Module):
+    def __call__(self, x):
+        if isinstance(x, list):
+            return [v.tanh() for v in x]
+        return x.tanh()
+
+class Sigmoid(Module):
+    def __call__(self, x):
+        if isinstance(x, list):
+            return [v.sigmoid() for v in x]
+        return x.sigmoid()
+        
 class MLP(Module):
 
-    def __init__(self, nin, nouts):
+    def __init__(self, nin, nouts, act_fn=ReLU):
+        """
+        nin: int, tamaño de entrada
+        nouts: list of int, tamaños de las capas siguientes
+        act_fn: Clase de la función de activación a usar (ReLU, Tanh, Sigmoid)
+        """
         sz = [nin] + nouts
-        self.layers = [Layer(sz[i], sz[i+1], nonlin=i!=len(nouts)-1) for i in range(len(nouts))]
+        self.layers = []
+        
+        for i in range(len(nouts)):
+            self.layers.append(Layer(sz[i], sz[i+1]))
+            
+            if i != len(nouts) - 1:
+                self.layers.append(act_fn())
 
     def __call__(self, x):
         for layer in self.layers:
