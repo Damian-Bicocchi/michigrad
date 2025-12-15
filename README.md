@@ -1,3 +1,15 @@
+# Resolución TP9
+
+### Integrantes
+* Bicocchi, Damián. Legajo 21114/8
+* Ciamparella, Valentin. Legajo 21116/0
+* Hernandez, Sebastian. Legajo 20996/9
+* Martinez Osti, María Josefina. Legajo 21583/5
+
+En rama main, el único ejercicio que se puede ejecutar es el punto 1
+
+
+
 # Michigrad
 Pequeño Autograd con fines educativos.
 
