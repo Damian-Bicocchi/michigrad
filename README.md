@@ -1,3 +1,13 @@
+Integrantes
+
+    Bicocchi, Damián. Legajo 21114/8
+    Ciamparella, Valentin. Legajo 21116/0
+    Hernandez, Sebastian. Legajo 20996/9
+    Martinez Osti, María Josefina. Legajo 21583/5
+
+En rama feat/parte 2, se pueden ejecutar el ejercicio 2 y 3
+
+
 # Michigrad
 Pequeño Autograd con fines educativos.
 
